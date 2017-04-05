@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Foody</string>
+    <string name="title_home">Home</string>
+
+    <!-- Botom Navigation View -->
+    <string name="str_nav_home">Home</string>
+    <string name="str_nav_notification">Notifications</string>
+    <string name="str_nav_collection">Collections</string>
+    <string name="str_nav_account">Account</string>
+    <string name="str_nav_search">Search</string>
+    <string name="str_appbar_logoDescription">Foody</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+</resources>
