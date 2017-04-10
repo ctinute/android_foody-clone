@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -20,8 +21,10 @@ import android.widget.Toast;
 
 import com.ctinute.foody.Adapters.CustomGridAdapter;
 import com.ctinute.foody.Adapters.ListViewDistrictAdapter;
+import com.ctinute.foody.Adapters.RecyclerViewAdapter;
 import com.ctinute.foody.CustomView.BottomNavigationViewEx;
 import com.ctinute.foody.Database.DistrictDBHelper;
+import com.ctinute.foody.Database.ItemDB;
 import com.ctinute.foody.MainActivity;
 import com.ctinute.foody.Objects.District;
 import com.ctinute.foody.R;
@@ -124,23 +127,24 @@ public class HomeWhereFragment extends Fragment {
             }
         });
 
-        // recycler view
+        // recycler view chinh
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerViewLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
-        /* do du lieu
-        recyclerViewAdapter = new RecyclerViewAdapter(myDataset);
-        mRecyclerView.setAdapter(mAdapter);
-        */
+
+        ItemDB itemDB = new ItemDB(MainActivity.database);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getContext(),R.layout.recycler_where_item,itemDB.getItemList());
+        recyclerView.setAdapter(recyclerViewAdapter);
+
+
+
+
 
         // danh sach tanh pho:
         listViewDistrict = (ExpandableListView) view.findViewById(R.id.listView_district);
-        // database load
         DistrictDBHelper districtDBHelper = new DistrictDBHelper(MainActivity.database);
         ArrayList<District> districtList = districtDBHelper.getDistrictList(1);
-        //ArrayList<District> districtList = new ArrayList<>();
-        //districtList.add(districtDBHelper.getDistrictList(1).get(0));
         ListViewDistrictAdapter listViewDistrictAdapter = new ListViewDistrictAdapter(getContext(),districtList);
         listViewDistrict.setAdapter(listViewDistrictAdapter);
 
@@ -149,7 +153,30 @@ public class HomeWhereFragment extends Fragment {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 // TODO: chon quan/huyen
-                return false;
+                return true;
+            }
+        });
+
+
+        Button buttonCancel1 = (Button) view.findViewById(R.id.button_cancel1);
+        buttonCancel1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeTab(0);
+            }
+        });
+        Button buttonCancel2 = (Button) view.findViewById(R.id.button_cancel2);
+        buttonCancel2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeTab(0);
+            }
+        });
+        Button buttonCancel3 = (Button) view.findViewById(R.id.button_cancel3);
+        buttonCancel3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeTab(0);
             }
         });
 

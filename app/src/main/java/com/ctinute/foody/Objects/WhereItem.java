@@ -8,7 +8,7 @@ import java.util.List;
  */
 
 public class WhereItem implements Serializable {
-    private Integer id,restaurantId,categoryId,districtId,totalPictures,totalReviews,typeId;
+    private Integer id,restaurantId,categoryId, cityID, districtId, streetId, totalPictures,totalReviews,typeId;
     private Double avgRating;
     private String address,name,img;
 
@@ -98,5 +98,21 @@ public class WhereItem implements Serializable {
 
     public void setTotalReviews(Integer totalReviews) {
         this.totalReviews = totalReviews;
+    }
+
+    public Integer getCityID() {
+        return cityID;
+    }
+
+    public void setCityID(Integer cityID) {
+        this.cityID = cityID;
+    }
+
+    public Integer getStreetId() {
+        return streetId;
+    }
+
+    public void setStreetId(Integer streetId) {
+        this.streetId = streetId;
     }
 }

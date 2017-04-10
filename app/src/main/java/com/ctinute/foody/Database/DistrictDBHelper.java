@@ -83,7 +83,6 @@ public class DistrictDBHelper {
                 res.moveToNext();
             }
         }
-        db.close();
         res.close();
         return list;
     }

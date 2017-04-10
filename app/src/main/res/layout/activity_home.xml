@@ -10,25 +10,28 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/appbar_height_default"
-        android:layout_alignParentTop="true"
         android:background="@color/colorPrimary"
         android:paddingLeft="@dimen/appbar_padding_left"
         android:paddingStart="@dimen/appbar_padding_left"
-        android:paddingRight="16dp"
-        android:paddingEnd="16dp">
+        android:paddingRight="8dp"
+        android:paddingEnd="8dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageButton
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="14dp"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="12dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:background="#00000000"
-                android:src="@drawable/icons_category_food"
-                android:contentDescription="@string/str_appbar_logoDescription" />
+                android:src="@drawable/icon_lg"
+                android:contentDescription="@string/str_appbar_logoDescription"
+                android:id="@+id/imageView" />
 
             <RadioGroup
                 android:layout_width="wrap_content"
@@ -58,15 +61,15 @@
                     android:textColor="@drawable/color_text_appbar"/>
             </RadioGroup>
 
-            <ImageButton
+            <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginTop="16dp"
-                android:background="#00000000"
-                app:srcCompat="@drawable/vc_plus"
+                android:tint="#ffffff"
+                android:src="@drawable/ic_plus_action_white"
+                android:contentDescription="@string/text_appbar_action"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:contentDescription="@string/text_appbar_action" />
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>

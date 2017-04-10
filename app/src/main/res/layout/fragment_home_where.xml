@@ -74,87 +74,104 @@
                 android:layout_width="fill_parent">
 
 
-                <LinearLayout
-                    android:id="@+id/tab_default"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:background="@color/colorBackground">
-
-
-                    <android.support.v4.view.ViewPager
-                        android:id="@+id/viewPagerSlider"
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:visibility="gone">
-                    </android.support.v4.view.ViewPager>
-
-                    <GridView
-                        android:id="@+id/gridView_category"
+                    <LinearLayout
+                        android:id="@+id/tab_default"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:verticalSpacing="4dp"
-                        android:horizontalSpacing="8dp"
-                        android:layout_margin="8dp"
-                        android:numColumns="2"/>
+                        android:orientation="vertical"
+                        android:isScrollContainer="true"
+                        android:background="@color/colorBackground">
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
 
-                    </android.support.v7.widget.RecyclerView>
+                        <android.support.v4.view.ViewPager
+                            android:id="@+id/viewPagerSlider"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:visibility="gone">
+                        </android.support.v4.view.ViewPager>
 
-                    <!--
-                    <TextView
-                        android:visibility="visible"
-                        android:id="@+id/txt_nothing"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="@color/colorFoody"
-                        android:layout_gravity="center"
-                        android:textAlignment="center"
-                        android:text="@string/txt_nothing"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:drawableTop="@drawable/dn_ic_view_error"/>
-                        -->
+                        <GridView
+                            android:id="@+id/gridView_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:isScrollContainer="false"
+                            android:verticalSpacing="4dp"
+                            android:horizontalSpacing="8dp"
+                            android:layout_margin="8dp"
+                            android:numColumns="2"/>
 
-                </LinearLayout>
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:verticalSpacing="8dp">
+                        </android.support.v7.widget.RecyclerView>
 
-                <LinearLayout
+                        <!--
+                        <TextView
+                            android:visibility="visible"
+                            android:id="@+id/txt_nothing"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorFoody"
+                            android:layout_gravity="center"
+                            android:textAlignment="center"
+                            android:text="@string/txt_nothing"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:drawableTop="@drawable/dn_ic_view_error"/>
+                            -->
+
+                    </LinearLayout>
+
+                <RelativeLayout
                     android:id="@+id/tab_newest"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
+                    <ListView
+                        android:id="@+id/listView_newest"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="This is tab 1" />
+                        android:layout_alignParentTop="true"/>
+                    <Button
+                        android:id="@+id/button_cancel1"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/colorWhite"
+                        android:text="@string/str_button_cancel"
+                        android:textAllCaps="false"/>
+                </RelativeLayout>
 
-                </LinearLayout>
-
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/tab_category"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
+                    android:layout_height="match_parent">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="This is tab 2" />
-                </LinearLayout>
+                    <Button
+                        android:id="@+id/button_cancel2"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/colorWhite"
+                        android:text="@string/str_button_cancel"
+                        android:textAllCaps="false"/>
+                </RelativeLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/tab_location"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent">
                     <RelativeLayout
+                        android:id="@+id/tab_location_topPanel"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
+                        android:layout_alignParentTop="true"
                         android:padding="8dp">
                         <TextView
                             android:layout_width="wrap_content"
@@ -189,8 +206,17 @@
                     <ExpandableListView
                         android:id="@+id/listView_district"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/tab_location_topPanel"/>
+                    <Button
+                        android:id="@+id/button_cancel3"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/colorWhite"
+                        android:text="@string/str_button_cancel"
+                        android:textAllCaps="false"/>
+                </RelativeLayout>
             </FrameLayout>
         </LinearLayout>
     </TabHost>
