@@ -1,32 +1,46 @@
 package com.ctinute.foody;
 
+import android.app.TabActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
-import android.support.v4.view.ViewPager;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
+import android.widget.Toast;
 
-import com.ctinute.foody.Adapters.ViewPagerAdapter;
 import com.ctinute.foody.CustomView.BottomNavigationViewEx;
+import com.ctinute.foody.Database.DatabaseCreator;
+import com.ctinute.foody.Objects.City;
 
-import com.ctinute.foody.Fragment.HomeWhatFragment;
-import com.ctinute.foody.Fragment.HomeWhereFragment;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends TabActivity {
 
-    private static final int NUM_MAIN_PAGES = 2;
-    ViewPager viewPagerMain;
-    ViewPagerAdapter viewPagerMainAdapter;
+    TabHost tabHostMain;
+
+    public final static String DATABASE_NAME="Foody.sqlite";
+    private final String DB_PATH_SUFFIX = "/databases/";
+
+    public static SQLiteDatabase database = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar appbar = (Toolbar) findViewById(R.id.appbar);
-        //setSupportActionBar(appbar);
+        SetupDatabase();
+        database = this.openOrCreateDatabase(DATABASE_NAME, Context.MODE_PRIVATE,null);
 
         // khoi tao thanh dieu huong duoi
         BottomNavigationViewEx navigation = (BottomNavigationViewEx) findViewById(R.id.navigation);
@@ -36,26 +50,21 @@ public class MainActivity extends FragmentActivity {
         navigation.setTextVisibility(false);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        // khoi tao pager home
-        viewPagerMain = (ViewPager) findViewById(R.id.viewPager_home);
-        viewPagerMainAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerMainAdapter.addFragment(new HomeWhereFragment(),"where");
-        viewPagerMainAdapter.addFragment(new HomeWhatFragment(),"what");
-        viewPagerMain.setAdapter(viewPagerMainAdapter);
-    }
+        tabHostMain = getTabHost();
+        //tabHostMain.setup();
 
-    @Override
-    public void onBackPressed() {
-        if (viewPagerMain.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            viewPagerMain.setCurrentItem(viewPagerMain.getCurrentItem() - 1);
-        }
-    }
+        TabSpec tab1 = tabHostMain.newTabSpec("Home");
+        TabSpec tab2 = tabHostMain.newTabSpec("Collection");
 
+        tab1.setIndicator("Tab1");
+        tab1.setContent(new Intent(this,HomeActivity.class));
+
+        tab2.setIndicator("Tab2");
+        tab2.setContent(new Intent(this,CollectionActivity.class));
+
+        tabHostMain.addTab(tab1);
+        tabHostMain.addTab(tab2);
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -64,10 +73,10 @@ public class MainActivity extends FragmentActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    //mTextMessage.setText(R.string.str_nav_home);
+                    tabHostMain.setCurrentTab(0);
                     return true;
                 case R.id.navigation_collection:
-                    //mTextMessage.setText(R.string.str_nav_collection);
+                    tabHostMain.setCurrentTab(1);
                     return true;
                 case R.id.navigation_search:
                    // mTextMessage.setText(R.string.str_nav_search);
@@ -83,5 +92,44 @@ public class MainActivity extends FragmentActivity {
         }
 
     };
+
+
+    private void SetupDatabase(){
+        File file = getDatabasePath(DATABASE_NAME);
+        if(!file.exists()){
+            try {
+                CopyDatabaseFromAsset();
+                Log.w("DBLog","Setup database SUCCESS !!");
+            }catch (Exception e){
+                Log.w("DBLog","Setup database FAIL !!");
+            }
+        }
+    }
+
+    private void CopyDatabaseFromAsset() {
+        try{
+            InputStream myInput = getAssets().open(DATABASE_NAME);
+            String outFile = getApplicationInfo().dataDir + DB_PATH_SUFFIX +DATABASE_NAME;
+
+            File f = new File(getApplicationInfo().dataDir + DB_PATH_SUFFIX);
+
+            if(!f.exists()){
+                f.mkdir();
+            }
+            OutputStream myOutput = new FileOutputStream(outFile);
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = myInput.read(buffer))>0){
+                myOutput.write(buffer,0,length);
+            }
+            myOutput.flush();
+            myOutput.close();
+            myInput.close();
+
+        }catch (Exception ex){
+            Log.d("Error",ex.toString());
+        }
+    }
 
 }
