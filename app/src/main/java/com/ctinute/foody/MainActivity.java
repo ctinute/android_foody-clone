@@ -1,5 +1,6 @@
 package com.ctinute.foody;
 
+import android.app.Notification;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -55,6 +56,9 @@ public class MainActivity extends TabActivity {
 
         TabSpec tab1 = tabHostMain.newTabSpec("Home");
         TabSpec tab2 = tabHostMain.newTabSpec("Collection");
+        TabSpec tab3 = tabHostMain.newTabSpec("Search");
+        TabSpec tab4 = tabHostMain.newTabSpec("Notification");
+        TabSpec tab5 = tabHostMain.newTabSpec("Account");
 
         tab1.setIndicator("Tab1");
         tab1.setContent(new Intent(this,HomeActivity.class));
@@ -62,8 +66,20 @@ public class MainActivity extends TabActivity {
         tab2.setIndicator("Tab2");
         tab2.setContent(new Intent(this,CollectionActivity.class));
 
+        tab3.setIndicator("Tab3");
+        tab3.setContent(new Intent(this,SearchActivity.class));
+
+        tab4.setIndicator("Tab4");
+        tab4.setContent(new Intent(this,NotificationActivity.class));
+
+        tab5.setIndicator("Tab5");
+        tab5.setContent(new Intent(this,AccountActivity.class));
+
         tabHostMain.addTab(tab1);
         tabHostMain.addTab(tab2);
+        tabHostMain.addTab(tab3);
+        tabHostMain.addTab(tab4);
+        tabHostMain.addTab(tab5);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -79,13 +95,13 @@ public class MainActivity extends TabActivity {
                     tabHostMain.setCurrentTab(1);
                     return true;
                 case R.id.navigation_search:
-                   // mTextMessage.setText(R.string.str_nav_search);
+                    tabHostMain.setCurrentTab(2);
                     return true;
                 case R.id.navigation_notification:
-                   // mTextMessage.setText(R.string.str_nav_notification);
+                    tabHostMain.setCurrentTab(3);
                     return true;
                 case R.id.navigation_account:
-                    //mTextMessage.setText(R.string.str_nav_account);
+                    tabHostMain.setCurrentTab(4);
                     return true;
             }
             return false;

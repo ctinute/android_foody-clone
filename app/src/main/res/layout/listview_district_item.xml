@@ -17,6 +17,11 @@
             android:gravity="center_vertical"
             android:text = "Quận 1"
             android:textSize="@dimen/text_normal"/>
+        <TextView
+            android:id="@+id/item_text_did"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
         <LinearLayout
             android:id="@+id/item_button_street"
             android:layout_width="wrap_content"

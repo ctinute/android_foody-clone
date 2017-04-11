@@ -53,11 +53,21 @@ public class ItemDB {
     }
     */
 
-    public ArrayList<WhereItem> getItemList() {
+    public ArrayList<WhereItem> getItemList(int id, int mode) {
         ArrayList<WhereItem> list = new ArrayList<>();
-
-        Cursor res =  db.rawQuery( "select * from "+TABLE_NAME, null );
-
+        String query = "select * from "+TABLE_NAME;
+        switch (mode){
+            case 0: // city
+                query =  "select * from "+TABLE_NAME+ " where CITYID = "+id;
+                break;
+            case 1:
+                query =  "select * from "+TABLE_NAME+ " where DISTRICTID = "+id;
+                break;
+            case 2:
+                query =  "select * from "+TABLE_NAME+ " where STREETID = "+id;
+                break;
+        }
+        Cursor res =  db.rawQuery(query,null);
         if ((res.moveToFirst()) && res.getCount() > 0){
             while(!res.isAfterLast()){
                 WhereItem item = new WhereItem();

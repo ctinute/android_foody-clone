@@ -132,7 +132,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             case TYPE_ITEM:
                 ViewHolderItem viewHolderItem = (ViewHolderItem) viewHolder;
-                WhereItem whereItem = itemList.get(i-1);
+                WhereItem whereItem = itemList.get(i-2);
 
                 viewHolderItem.textViewAvgRating.setText(String.valueOf((double) Math.round(whereItem.getAvgRating() * 10) / 10));
                 viewHolderItem.textViewLabel.setText(whereItem.getName());

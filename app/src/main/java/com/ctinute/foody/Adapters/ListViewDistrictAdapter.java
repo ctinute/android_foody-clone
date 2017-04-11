@@ -72,14 +72,16 @@ public class ListViewDistrictAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             listItem = inflater.inflate(R.layout.listview_district_item, parent, false);
         } else {
-            listItem = (View) convertView;
+            listItem = convertView;
         }
 
         TextView textViewDistrictName = (TextView) listItem.findViewById(R.id.item_text_cname);
+        TextView textViewDistrictId = (TextView) listItem.findViewById(R.id.item_text_did);
         TextView textViewNumberOfStreet = (TextView) listItem.findViewById(R.id.item_text_numberOfStreet);
         LinearLayout buttonStreet = (LinearLayout) listItem.findViewById(R.id.item_button_street);
 
         textViewDistrictName.setText(districtToDisplay.getName());
+        textViewDistrictId.setText(String.valueOf(districtToDisplay.getId()));
         String strToDisplay = String.valueOf(districtToDisplay.getStreetList().size())+" đường";
         textViewNumberOfStreet.setText(strToDisplay);
 
@@ -109,18 +111,20 @@ public class ListViewDistrictAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             listItem = inflater.inflate(R.layout.listview_district_street_item,  parent, false);
         } else {
-            listItem = (View) convertView;
+            listItem = convertView;
         }
 
         TextView textView = (TextView) listItem.findViewById(R.id.item_text_streetname);
+        TextView textViewId = (TextView) listItem.findViewById(R.id.item_text_streetid);
         textView.setText(streetToDisplay.getName());
+        textViewId.setText(String.valueOf(streetToDisplay.getId()));
 
         return listItem;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
     }
 
 }

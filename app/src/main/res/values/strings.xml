@@ -25,4 +25,5 @@
     <string name="str_deli_now">Đặt giao hàng</string>
     <string name="str_opening">Đang mở cửa</string>
     <string name="str_button_cancel">Huỷ</string>
+    <string name="str_function_error">Tính năng chưa hoàn thiện !</string>
 </resources>
