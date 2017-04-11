@@ -8,15 +8,16 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ctinute.foody.R;
 
-public class CustomGridAdapter extends BaseAdapter{
+public class GridViewMenuAdapter extends BaseAdapter{
     private Context mContext;
     private final String[] labelList;
     private final int[] imageList;
 
-    public CustomGridAdapter(Context c, String[] labelList, int[] imageList ) {
+    public GridViewMenuAdapter(Context c, String[] labelList, int[] imageList ) {
         mContext = c;
         this.labelList = labelList;
         this.imageList = imageList;
@@ -24,39 +25,47 @@ public class CustomGridAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
         return labelList.length;
     }
 
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
-        return 0;
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View gridItem;
+
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        TextView textView;
+        ImageView imageView;
 
         if (convertView == null) {
-            gridItem = new View(mContext);
-            gridItem = inflater.inflate(R.layout.grid_item, null);
-
-            TextView textView = (TextView) gridItem.findViewById(R.id.gridView_category_item_text);
-            ImageView imageView = (ImageView)gridItem.findViewById(R.id.gridView_category_item_img);
-            textView.setText(labelList[position]);
-            imageView.setImageResource(imageList[position]);
+            gridItem = inflater.inflate(R.layout.grid_item, parent, false);
+            textView = (TextView) gridItem.findViewById(R.id.gridView_category_item_text);
+            imageView = (ImageView) gridItem.findViewById(R.id.gridView_category_item_img);
 
         } else {
             gridItem = (View) convertView;
+            textView = (TextView) convertView.findViewById(R.id.gridView_category_item_text);
+            imageView = (ImageView) convertView.findViewById(R.id.gridView_category_item_img);
         }
+
+        textView.setText(labelList[position]);
+        imageView.setImageResource(imageList[position]);
+
+        gridItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext,"Tính năng chưa hoàn thiện !",Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return gridItem;
     }

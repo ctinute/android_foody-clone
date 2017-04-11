@@ -5,11 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.RadioButton;
 
-import com.ctinute.foody.Adapters.CustomGridAdapter;
 import com.ctinute.foody.Adapters.ViewPagerAdapter;
 import com.ctinute.foody.Fragment.HomeWhatFragment;
 import com.ctinute.foody.Fragment.HomeWhereFragment;

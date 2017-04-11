@@ -1,75 +1,183 @@
 package com.ctinute.foody.Adapters;
 
 import android.content.Context;
+import android.os.Handler;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.ctinute.foody.CustomView.ExpandableHeightGridView;
 import com.ctinute.foody.Objects.WhereItem;
 import com.ctinute.foody.R;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int TYPE_SLIDE = 0;
+    private static final int TYPE_GRID = 1;
+    private static final int TYPE_ITEM = 2;
 
     private Context mContext;
-    private int layout;
     private ArrayList<WhereItem> itemList;
 
-    public RecyclerViewAdapter(Context mContext, int layout, ArrayList<WhereItem> itemList) {
+    private BaseAdapter gridAdapter;    // adapter cho GridView
+    private PagerAdapter slideAdapter;  // adapter cho ViewPager (Image Slide)
+
+    public RecyclerViewAdapter(Context mContext, ArrayList<WhereItem> itemList, BaseAdapter gridAdapter, PagerAdapter slideAdapter) {
         this.mContext = mContext;
-        this.layout = layout;
         this.itemList = itemList;
+        this.slideAdapter = slideAdapter;
+        this.gridAdapter = gridAdapter;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(layout, parent, false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        WhereItem whereItem = itemList.get(i);
-
-        viewHolder.textViewAvgRating.setText(String.valueOf((double) Math.round(whereItem.getAvgRating() * 10) / 10));
-        viewHolder.textViewLabel.setText(whereItem.getName());
-        viewHolder.textViewAddress.setText(whereItem.getAddress());
-        // TODO: xu li video
-        if (!whereItem.getImg().equals("")){
-            int imageResource = mContext.getResources().getIdentifier("fdi"+whereItem.getImg(), "drawable", mContext.getPackageName());
-            viewHolder.imageView.setImageResource(imageResource);
+    public int getItemViewType(int position)
+    {
+        switch (position) {
+            case 0:
+                return TYPE_SLIDE;
+            case 1:
+                return TYPE_GRID;
+            default:
+                return TYPE_ITEM;
         }
-        else {
-            viewHolder.imageView.setImageResource(R.drawable.fdi_null);
-        }
-        viewHolder.buttonOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext,"Tính năng chưa hoàn thiện !",Toast.LENGTH_SHORT).show();
-            }
-        });
-        viewHolder.textViewComment.setText(String.valueOf(whereItem.getTotalReviews()));
-        viewHolder.textViewPhoto.setText(String.valueOf(whereItem.getTotalPictures()));
-        // TODO: xu li trang thai dua vao gio dong mo cua trong database (can sua lai database)
-        viewHolder.textViewStatus.setText(String.valueOf("Đang mở cửa"));
-        viewHolder.imageViewStatus.setColorFilter(mContext.getResources().getColor(R.color.colorSuccess));
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return itemList.size()+2;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+        Log.w("log","onCreateViewHolder "+i);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view;
+        RecyclerView.ViewHolder viewHolder = null;
+        switch (i) {
+            case TYPE_SLIDE:
+                view = inflater.inflate(R.layout.recycler_where_slide, parent, false);
+                viewHolder = new ViewHolderSlide(view);
+                break;
+            case TYPE_GRID:
+                //Log.w("log","onCreateViewHolder = create Grid "+i);
+                view = inflater.inflate(R.layout.recycler_where_grid, parent, false);
+                viewHolder = new ViewHolderGrid(view);
+                break;
+            case TYPE_ITEM:
+                //Log.w("log","onCreateViewHolder = create Item "+i);
+                view = inflater.inflate(R.layout.recycler_where_item, parent, false);
+                viewHolder = new ViewHolderItem(view);
+                break;
+        }
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+        Log.w("log","onBindViewHolder "+i + " - type"+viewHolder.getItemViewType());
+        switch (viewHolder.getItemViewType()){
+            case TYPE_SLIDE:
+                final ViewHolderSlide viewHolderSlide = (ViewHolderSlide) viewHolder;
+                viewHolderSlide.viewPager.setAdapter(slideAdapter);
+
+                // thiet lap tu dong slide
+                final Handler handler = new Handler();
+                final Runnable Update = new Runnable() {
+                    int currentPage = 0;
+                    public void run() {
+                        if (currentPage == (viewHolderSlide.viewPager.getChildCount()-1))
+                            currentPage = 0;
+                        else
+                            currentPage++;
+                        viewHolderSlide.viewPager.setCurrentItem(currentPage, true);
+                    }
+                };
+                Timer swipeTimer = new Timer();
+                swipeTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        handler.post(Update);
+                    }
+                }, 5000, 5000);
+
+                Log.w("log","created slide");
+                break;
+
+            case TYPE_GRID:
+                ViewHolderGrid viewHolderGrid = (ViewHolderGrid) viewHolder;
+                viewHolderGrid.gridView.setExpanded(true);
+                viewHolderGrid.gridView.setAdapter(gridAdapter);
+                Log.w("log","created grid");
+                break;
+
+            case TYPE_ITEM:
+                ViewHolderItem viewHolderItem = (ViewHolderItem) viewHolder;
+                WhereItem whereItem = itemList.get(i-1);
+
+                viewHolderItem.textViewAvgRating.setText(String.valueOf((double) Math.round(whereItem.getAvgRating() * 10) / 10));
+                viewHolderItem.textViewLabel.setText(whereItem.getName());
+                viewHolderItem.textViewAddress.setText(whereItem.getAddress());
+                // TODO: xu li video
+                if (!whereItem.getImg().equals("")){
+                    int imageResource = mContext.getResources().getIdentifier("fdi"+whereItem.getImg(), "drawable", mContext.getPackageName());
+                    viewHolderItem.imageView.setImageResource(imageResource);
+                }
+                else {
+                    viewHolderItem.imageView.setImageResource(R.drawable.fdi_null);
+                }
+                viewHolderItem.buttonOrder.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(mContext,"Tính năng chưa hoàn thiện !",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                viewHolderItem.textViewComment.setText(String.valueOf(whereItem.getTotalReviews()));
+                viewHolderItem.textViewPhoto.setText(String.valueOf(whereItem.getTotalPictures()));
+                // TODO: xu li trang thai dua vao gio dong mo cua trong database (can sua lai database)
+                viewHolderItem.textViewStatus.setText(String.valueOf("Đang mở cửa"));
+                viewHolderItem.imageViewStatus.setColorFilter(mContext.getResources().getColor(R.color.colorSuccess));
+                Log.w("log","created item");
+                break;
+        }
+    }
+
+    private static class ViewHolderSlide extends RecyclerView.ViewHolder{
+        ViewPager viewPager;
+        ViewHolderSlide(View itemView) {
+            super(itemView);
+            viewPager = (ViewPager) itemView.findViewById(R.id.viewPager_slide);
+        }
+    }
+
+    private static class ViewHolderGrid extends RecyclerView.ViewHolder {
+        ExpandableHeightGridView gridView;
+        ViewHolderGrid(View itemView) {
+            super(itemView);
+            gridView = (ExpandableHeightGridView) itemView.findViewById(R.id.gridView_category);
+        }
+    }
+
+    private static class ViewHolderItem extends RecyclerView.ViewHolder {
         TextView textViewAvgRating;
         TextView textViewLabel;
         TextView textViewAddress;
@@ -81,7 +189,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView textViewStatus;
         ImageView imageViewStatus;
 
-        ViewHolder(View v) {
+        ViewHolderItem(View v) {
             super(v);
             textViewAvgRating = (TextView) v.findViewById(R.id.item_text_avgRating);
             textViewLabel = (TextView) v.findViewById(R.id.item_text_label);
@@ -95,4 +203,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imageViewStatus = (ImageView) v.findViewById(R.id.item_image_status);
         }
     }
+
 }

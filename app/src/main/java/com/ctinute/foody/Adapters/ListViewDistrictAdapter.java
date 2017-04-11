@@ -1,8 +1,6 @@
 package com.ctinute.foody.Adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,8 +96,6 @@ public class ListViewDistrictAdapter extends BaseExpandableListAdapter {
                     ((ExpandableListView) fparent).expandGroup(fgroupPosition, true);
             }
         });
-
-        Log.w("log","add item: "+districtToDisplay.getName());
         return listItem;
     }
 
@@ -111,7 +107,7 @@ public class ListViewDistrictAdapter extends BaseExpandableListAdapter {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
-            listItem = inflater.inflate(R.layout.listview_street_item,  parent, false);
+            listItem = inflater.inflate(R.layout.listview_district_street_item,  parent, false);
         } else {
             listItem = (View) convertView;
         }

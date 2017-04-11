@@ -2,13 +2,13 @@ package com.ctinute.foody.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
@@ -17,12 +17,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TabHost;
 import android.widget.TabWidget;
-import android.widget.Toast;
 
-import com.ctinute.foody.Adapters.CustomGridAdapter;
+import com.ctinute.foody.Adapters.GridViewMenuAdapter;
 import com.ctinute.foody.Adapters.ListViewDistrictAdapter;
 import com.ctinute.foody.Adapters.RecyclerViewAdapter;
+import com.ctinute.foody.Adapters.ViewPagerSlideAdapter;
 import com.ctinute.foody.CustomView.BottomNavigationViewEx;
+import com.ctinute.foody.CustomView.ExpandableHeightGridView;
+import com.ctinute.foody.CustomView.ExpandableHeightListView;
 import com.ctinute.foody.Database.DistrictDBHelper;
 import com.ctinute.foody.Database.ItemDB;
 import com.ctinute.foody.MainActivity;
@@ -51,10 +53,10 @@ public class HomeWhereFragment extends Fragment {
     private int[] gridViewImageList = {
             R.drawable.ic_nearby,R.drawable.ic_ecoupon,R.drawable.ic_tablenow,R.drawable.ic_deli,R.drawable.ic_ecard,R.drawable.ic_game,R.drawable.ic_comments,R.drawable.ic_blog,R.drawable.ic_topuser,R.drawable.ic_video};
 
-    private GridView gridViewMenu;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter recyclerViewAdapter;
-    private RecyclerView.LayoutManager recyclerViewLayoutManager;
+    private int[] viewPagerSlideDrawableList = {R.drawable.slide1,R.drawable.slide2};
+
+    private ExpandableHeightGridView gridViewMenu;
+    private ExpandableHeightListView listViewItem;
 
     ExpandableListView listViewDistrict;
 
@@ -115,33 +117,24 @@ public class HomeWhereFragment extends Fragment {
 
         addEvent();
 
-
-        // gridView menu
-        gridViewMenu = (GridView) view.findViewById(R.id.gridView_category);
-        CustomGridAdapter gridviewAdapter = new CustomGridAdapter(getActivity(),gridViewLabelList,gridViewImageList);
-        gridViewMenu.setAdapter(gridviewAdapter);
-        gridViewMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(getContext(), "hahaha" + position,Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // recycler view chinh
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerViewLayoutManager = new LinearLayoutManager(getContext());
+        // TAB: mac dinh
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        ItemDB itemDB = new ItemDB(MainActivity.database);
+        LinearLayoutManager recyclerViewLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
 
-        ItemDB itemDB = new ItemDB(MainActivity.database);
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getContext(),R.layout.recycler_where_item,itemDB.getItemList());
+        GridViewMenuAdapter gridViewMenuAdapter = new GridViewMenuAdapter(getContext(),gridViewLabelList,gridViewImageList);
+        ViewPagerSlideAdapter viewPagerSlideAdapter = new ViewPagerSlideAdapter(getContext(),viewPagerSlideDrawableList);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getContext(),itemDB.getItemList(),gridViewMenuAdapter,viewPagerSlideAdapter);
         recyclerView.setAdapter(recyclerViewAdapter);
 
+        recyclerView.setHasFixedSize(true);
+        //recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        //recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
 
-
-
-        // danh sach tanh pho:
+        // TAB: danh sach tanh pho:
         listViewDistrict = (ExpandableListView) view.findViewById(R.id.listView_district);
         DistrictDBHelper districtDBHelper = new DistrictDBHelper(MainActivity.database);
         ArrayList<District> districtList = districtDBHelper.getDistrictList(1);
