@@ -2,10 +2,6 @@ package com.ctinute.foody.Objects;
 
 import java.io.Serializable;
 
-/**
- * Created by binhb on 10/03/2017.
- */
-
 public class Type implements Serializable {
     Integer id;
     String name;

@@ -15,14 +15,14 @@ import com.ctinute.foody.Objects.Street;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DistrictDBHelper {
+public class DistrictDB {
     private static final String TABLE_NAME = "DISTRICT";
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_NAME = "NAME";
 
     private SQLiteDatabase db;
 
-    public DistrictDBHelper(SQLiteDatabase sqLiteDatabase) {
+    public DistrictDB(SQLiteDatabase sqLiteDatabase) {
         this.db = sqLiteDatabase;
     }
 

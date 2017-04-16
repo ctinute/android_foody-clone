@@ -26,4 +26,6 @@
     <string name="str_opening">Đang mở cửa</string>
     <string name="str_button_cancel">Huỷ</string>
     <string name="str_function_error">Tính năng chưa hoàn thiện !</string>
+    <string name="str_select_city_label">Chọn Tỉnh/Thành phố</string>
+    <string name="str_error_no_content">Không có nội dung !</string>
 </resources>

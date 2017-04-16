@@ -109,7 +109,7 @@ public class ListViewDistrictAdapter extends BaseExpandableListAdapter {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
-            listItem = inflater.inflate(R.layout.listview_district_street_item,  parent, false);
+            listItem = inflater.inflate(R.layout.listview_item_text_and_id,  parent, false);
         } else {
             listItem = convertView;
         }

@@ -3,9 +3,6 @@ package com.ctinute.foody.Objects;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by schrodinger on 4/8/2017.
- */
 
 public class WhereItem implements Serializable {
     private Integer id,restaurantId,categoryId, cityID, districtId, streetId, totalPictures,totalReviews,typeId;

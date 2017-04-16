@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private static final int TYPE_SLIDE = 0;
     private static final int TYPE_GRID = 1;
-    private static final int TYPE_ITEM = 2;
+    private static final int TYPE_NULL = 2;
+    private static final int TYPE_ITEM = 3;
 
     private Context mContext;
     private ArrayList<WhereItem> itemList;
@@ -52,6 +52,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return TYPE_SLIDE;
             case 1:
                 return TYPE_GRID;
+            case 2:
+                return TYPE_NULL;
             default:
                 return TYPE_ITEM;
         }
@@ -59,17 +61,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return itemList.size()+2;
+        return itemList.size()+3;
     }
 
     @Override
     public long getItemId(int position) {
+        if (position == getItemCount())
+            return 0;
         return position;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        Log.w("log","onCreateViewHolder "+i);
+        //Log.w("log","onCreateViewHolder "+i);
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view;
         RecyclerView.ViewHolder viewHolder = null;
@@ -79,12 +83,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 viewHolder = new ViewHolderSlide(view);
                 break;
             case TYPE_GRID:
-                //Log.w("log","onCreateViewHolder = create Grid "+i);
                 view = inflater.inflate(R.layout.recycler_where_grid, parent, false);
                 viewHolder = new ViewHolderGrid(view);
                 break;
+            case TYPE_NULL:
+                view = inflater.inflate(R.layout.recycler_item_null, parent, false);
+                viewHolder = new ViewHolderNull(view);
+                break;
             case TYPE_ITEM:
-                //Log.w("log","onCreateViewHolder = create Item "+i);
                 view = inflater.inflate(R.layout.recycler_where_item, parent, false);
                 viewHolder = new ViewHolderItem(view);
                 break;
@@ -94,7 +100,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-        Log.w("log","onBindViewHolder "+i + " - type"+viewHolder.getItemViewType());
+        //Log.w("log","onBindViewHolder "+i + " - type"+viewHolder.getItemViewType());
         switch (viewHolder.getItemViewType()){
             case TYPE_SLIDE:
                 final ViewHolderSlide viewHolderSlide = (ViewHolderSlide) viewHolder;
@@ -119,20 +125,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         handler.post(Update);
                     }
                 }, 5000, 5000);
-
-                Log.w("log","created slide");
                 break;
 
             case TYPE_GRID:
                 ViewHolderGrid viewHolderGrid = (ViewHolderGrid) viewHolder;
                 viewHolderGrid.gridView.setExpanded(true);
                 viewHolderGrid.gridView.setAdapter(gridAdapter);
-                Log.w("log","created grid");
+                break;
+
+            case TYPE_NULL:
+                ViewHolderNull viewHolderNull = (ViewHolderNull) viewHolder;
+                if (itemList == null || itemList.size() == 0){
+                    viewHolderNull.layout.setVisibility(View.VISIBLE);
+                    viewHolderNull.imageView.setVisibility(View.VISIBLE);
+                    viewHolderNull.textView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    viewHolderNull.layout.setVisibility(View.GONE);
+                    viewHolderNull.imageView.setVisibility(View.GONE);
+                    viewHolderNull.textView.setVisibility(View.GONE);
+                }
                 break;
 
             case TYPE_ITEM:
                 ViewHolderItem viewHolderItem = (ViewHolderItem) viewHolder;
-                WhereItem whereItem = itemList.get(i-2);
+                WhereItem whereItem = itemList.get(i-3);
 
                 viewHolderItem.textViewAvgRating.setText(String.valueOf((double) Math.round(whereItem.getAvgRating() * 10) / 10));
                 viewHolderItem.textViewLabel.setText(whereItem.getName());
@@ -156,7 +173,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 // TODO: xu li trang thai dua vao gio dong mo cua trong database (can sua lai database)
                 viewHolderItem.textViewStatus.setText(String.valueOf("Đang mở cửa"));
                 viewHolderItem.imageViewStatus.setColorFilter(mContext.getResources().getColor(R.color.colorSuccess));
-                Log.w("log","created item");
+                //Log.w("log","created item");
                 break;
         }
     }
@@ -201,6 +218,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             textViewPhoto = (TextView) v.findViewById(R.id.item_text_photo);
             textViewStatus = (TextView) v.findViewById(R.id.item_text_status);
             imageViewStatus = (ImageView) v.findViewById(R.id.item_image_status);
+        }
+    }
+
+    private static class ViewHolderNull extends RecyclerView.ViewHolder {
+        LinearLayout layout;
+        ImageView imageView;
+        TextView textView;
+
+        ViewHolderNull(View v) {
+            super(v);
+            layout = (LinearLayout) v.findViewById(R.id.list_item_null);
+            imageView = (ImageView) v.findViewById(R.id.list_item_image_null);
+            textView = (TextView) v.findViewById(R.id.list_item_text_null);
         }
     }
 
