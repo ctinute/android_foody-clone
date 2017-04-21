@@ -39,7 +39,6 @@ public class SelectCityActivity extends AppCompatActivity {
 
         cityDB = new CityDB(MainActivity.database);
 
-
         selectedCityId = getIntent().getIntExtra("selectedCityId",0);
 
         // lay danh sach tinh/thanh pho
@@ -52,10 +51,7 @@ public class SelectCityActivity extends AppCompatActivity {
         listViewCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedCity = (City) listViewCity.getAdapter().getItem(position);
-                view.setSelected(true);
-                ((ListViewCityAdapter) listViewCity.getAdapter()).setSelectedIndex(position);
-                ((ListViewCityAdapter) listViewCity.getAdapter()).notifyDataSetChanged();
+                changeCity(position);
             }
         });
 
@@ -63,13 +59,9 @@ public class SelectCityActivity extends AppCompatActivity {
         EditText editTextSearch = (EditText) findViewById(R.id.editText_search);
         editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
-            public void afterTextChanged(Editable s) {
-            }
-
+            public void afterTextChanged(Editable s) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 cityList = cityDB.getCityList(String.valueOf(s));
@@ -130,5 +122,11 @@ public class SelectCityActivity extends AppCompatActivity {
         intent.putExtra("isCityChanged",false);
         setResult(11,intent);   // 11: // request code tu HomeWhereFragment
         finish();
+    }
+
+    // thay doi tinh/thanh pho
+    private void changeCity(int index){
+        listViewCityAdapter.setSelectedIndex(index);
+        selectedCity = (City) listViewCityAdapter.getItem(index);
     }
 }

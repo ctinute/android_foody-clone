@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +46,7 @@ public class GridViewMenuAdapter extends BaseAdapter{
         ImageView imageView;
 
         if (convertView == null) {
-            gridItem = inflater.inflate(R.layout.grid_item, parent, false);
+            gridItem = inflater.inflate(R.layout.layout_item_image_text, parent, false);
             textView = (TextView) gridItem.findViewById(R.id.gridView_category_item_text);
             imageView = (ImageView) gridItem.findViewById(R.id.gridView_category_item_img);
 

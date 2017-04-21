@@ -1,10 +1,8 @@
 package com.ctinute.foody;
 
-import android.app.Notification;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,18 +11,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
-import android.widget.Toast;
 
 import com.ctinute.foody.CustomView.BottomNavigationViewEx;
-import com.ctinute.foody.Database.DatabaseCreator;
-import com.ctinute.foody.Objects.City;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends TabActivity {
 

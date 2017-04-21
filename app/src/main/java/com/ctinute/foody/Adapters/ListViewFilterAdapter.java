@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ctinute.foody.R;
 
@@ -18,6 +17,7 @@ public class ListViewFilterAdapter extends BaseAdapter {
     private String[] listViewNewsestLabelList;
     private int[] listViewNewsestDrawableList;
     private boolean[] listViewNewsestTagList;
+    private int selectedIndex;
 
     public ListViewFilterAdapter(Context mContext, String[] listViewNewsestLabelList, int[] listViewNewsestDrawableList, boolean[] listViewNewsestTagList) {
         super();
@@ -25,6 +25,11 @@ public class ListViewFilterAdapter extends BaseAdapter {
         this.listViewNewsestLabelList = listViewNewsestLabelList;
         this.listViewNewsestDrawableList = listViewNewsestDrawableList;
         this.listViewNewsestTagList = listViewNewsestTagList;
+    }
+
+    public void setSelectedIndex(int selectedIndex) {
+        this.selectedIndex = selectedIndex;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -48,7 +53,7 @@ public class ListViewFilterAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
-            listItem = inflater.inflate(R.layout.listview_filter_item, parent, false);
+            listItem = inflater.inflate(R.layout.layout_item_image_text_tag, parent, false);
         } else {
             listItem = convertView;
         }
@@ -64,14 +69,15 @@ public class ListViewFilterAdapter extends BaseAdapter {
         else
             tag.setVisibility(View.GONE);
 
-        /*
-        listItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "Tính năng chưa hoàn thiện", Toast.LENGTH_SHORT).show();
-            }
-        });
-            */
+        if (position == selectedIndex){
+            label.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+            icon.setColorFilter(mContext.getResources().getColor(R.color.colorAccent));
+        }
+        else {
+            label.setTextColor(mContext.getResources().getColor(R.color.textColorMain));
+            icon.setColorFilter(mContext.getResources().getColor(R.color.textColorMain));
+        }
+
         return listItem;
     }
 }

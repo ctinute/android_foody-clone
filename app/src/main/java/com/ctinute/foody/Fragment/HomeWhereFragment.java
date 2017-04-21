@@ -4,10 +4,9 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -26,14 +24,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ctinute.foody.Adapters.GridViewMenuAdapter;
+import com.ctinute.foody.Adapters.ListViewCategoryAdapter;
 import com.ctinute.foody.Adapters.ListViewDistrictAdapter;
 import com.ctinute.foody.Adapters.ListViewFilterAdapter;
 import com.ctinute.foody.Adapters.RecyclerViewAdapter;
 import com.ctinute.foody.Adapters.ViewPagerSlideAdapter;
 import com.ctinute.foody.CustomView.BottomNavigationViewEx;
+import com.ctinute.foody.Database.CategoryDB;
 import com.ctinute.foody.Database.DistrictDB;
 import com.ctinute.foody.Database.ItemDB;
 import com.ctinute.foody.MainActivity;
+import com.ctinute.foody.Objects.Category;
 import com.ctinute.foody.Objects.District;
 import com.ctinute.foody.Objects.Street;
 import com.ctinute.foody.Objects.WhereItem;
@@ -44,13 +45,11 @@ import java.util.ArrayList;
 
 public class HomeWhereFragment extends Fragment {
 
-    private boolean useDistrcitFiler;
-    private boolean useStreetFilter;
-    private int selectedCityId;
     private String selectedCityName;
+    private int selectedCityId;
     private int selectedDistrictId;
     private int selectedStreetId;
-    private int selectedTypeFilter;
+    private int selectedCategoryId;
 
     SQLiteDatabase database;
 
@@ -59,7 +58,7 @@ public class HomeWhereFragment extends Fragment {
     FrameLayout tabcontent;
 
     RadioGroup radioGroup;
-    RadioButton buttonNewest;
+    RadioButton buttonFilter;
     RadioButton buttonCategory;
     RadioButton buttonLocation;
     BottomNavigationViewEx navBar;
@@ -71,7 +70,8 @@ public class HomeWhereFragment extends Fragment {
     GridViewMenuAdapter gridViewMenuAdapter;
     ViewPagerSlideAdapter viewPagerSlideAdapter;
 
-    ListView listViewNewest;
+    ListView listViewFilter;
+    ListView listViewCategory;
 
 
 
@@ -96,10 +96,11 @@ public class HomeWhereFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_where, container, false);
 
-        useDistrcitFiler = false;  // loc theo quan/huyen ?
-        useStreetFilter = false;   // loc theo duong ?
         selectedCityId = 1;         // mac dinh TP.HCM
+        selectedDistrictId = 0;
+        selectedStreetId = 0;
         selectedCityName = "TP.HCM";
+        selectedCategoryId = 1;
 
         layoutInit(view);
         dataInit();
@@ -116,16 +117,7 @@ public class HomeWhereFragment extends Fragment {
         if (requestCode == 11){
             // request code tu HomeWhereFragment -> SelectCityActivity
             if (data.getBooleanExtra("isCityChanged",false)){
-                useDistrcitFiler = false;
-                useStreetFilter = false;
-                selectedCityId = data.getIntExtra("selectedCityId",1);  // 1: default value
-                selectedCityName = data.getStringExtra("selectedCityName");
-                selectedDistrictId = 0;
-                selectedStreetId = 0;
-                selectedTypeFilter = 0;
-
-                dataInit();
-                changeTab(0);
+                changeCity(data.getIntExtra("selectedCityId",1), data.getStringExtra("selectedCityName"));
             }
         }
     }
@@ -142,12 +134,13 @@ public class HomeWhereFragment extends Fragment {
         tabcontent = (FrameLayout) view.findViewById(android.R.id.tabcontent);
         radioGroup = (RadioGroup) view.findViewById(R.id.radiogroup_filter);
 
-        buttonNewest = (RadioButton) view.findViewById(R.id.button_newest);
+        buttonFilter = (RadioButton) view.findViewById(R.id.button_newest);
         buttonCategory = (RadioButton) view.findViewById(R.id.button_category);
         buttonLocation = (RadioButton) view.findViewById(R.id.button_location);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        listViewNewest = (ListView) view.findViewById(R.id.listView_newest);
+        listViewFilter = (ListView) view.findViewById(R.id.listView_newest);
+        listViewCategory = (ListView) view.findViewById(R.id.listview_category);
         listViewDistrict = (ExpandableListView) view.findViewById(R.id.listView_district);
 
         textViewTabLocationCurrentCity = (TextView) view.findViewById(R.id.tab_location_text_current_city);
@@ -180,8 +173,6 @@ public class HomeWhereFragment extends Fragment {
         tabHost.addTab(spec);
 
         tabHost.setCurrentTab(0);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     // data
@@ -193,26 +184,29 @@ public class HomeWhereFragment extends Fragment {
 
         // Tab 1: ListView loc
         ListViewFilterAdapter listViewFilterAdapter = new ListViewFilterAdapter(getContext(), listViewNewsestLabelList, listViewNewsestDrawableList,listViewNewsestTagList);
-        listViewNewest.setAdapter(listViewFilterAdapter);
-        //TODO: BUG: setSelection not working
-        listViewNewest.setSelection(0);
+        listViewFilter.setAdapter(listViewFilterAdapter);
+        changeFilter(0);
 
         // Tab 2:
+        CategoryDB categoryDB = new CategoryDB(database);
+        ArrayList<Category> categoryArrayList = categoryDB.getCategoryList();
+        ListViewCategoryAdapter listViewCategoryAdapter = new ListViewCategoryAdapter(getContext(),categoryArrayList);
+        listViewCategory.setAdapter(listViewCategoryAdapter);
+        changeCategory(0);
 
         // Tab 3: Danh sach quan/huyen, duong
-        buttonLocation.setText(selectedCityName);
-        textViewTabLocationCurrentCity.setText(selectedCityName);
         DistrictDB districtDB = new DistrictDB(this.database);
         ArrayList<District> districtList = districtDB.getDistrictList(selectedCityId);
         ListViewDistrictAdapter listViewDistrictAdapter = new ListViewDistrictAdapter(getContext(),districtList);
         listViewDistrict.setAdapter(listViewDistrictAdapter);
+        changeCity(selectedCityId,selectedCityName);
     }
 
 
     //
     private void eventInit(View view){
         // TabWidget (chuyen trang)
-        buttonNewest.setOnClickListener(new View.OnClickListener() {
+        buttonFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Log.w("log","button 1");
@@ -257,58 +251,42 @@ public class HomeWhereFragment extends Fragment {
         });
 
         // Tab 1
-        listViewNewest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewFilter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.w("log","Listview filter selected index: "+ position);
-                // dieu chinh hien thi cho selected item cu
-                View selectedItemViewOld = listViewNewest.getAdapter().getView(selectedTypeFilter,view,parent);
-                ImageView iconOld = (ImageView) selectedItemViewOld.findViewById(R.id.listView_filter_item_icon);
-                TextView labelOld = (TextView) selectedItemViewOld.findViewById(R.id.listView_filter_item_text);
-                //TODO: BUG: set color not working
-                iconOld.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBackgroundDarkerr));
-                labelOld.setTextColor(ContextCompat.getColor(getContext(),R.color.textColorMain));
-                // dieu chinh hien thi cho selected item moi
-                View selectedItemView = listViewNewest.getAdapter().getView(position,view,parent);
-                ImageView icon = (ImageView) selectedItemView.findViewById(R.id.listView_filter_item_icon);
-                TextView label = (TextView) selectedItemView.findViewById(R.id.listView_filter_item_text);
-                icon.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorAccent));
-                label.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                listViewNewest.setSelection(position);
-                selectedTypeFilter = position;
-                // cap nhat tab label
-                buttonNewest.setText(label.getText());
-                // TODO: cap nhat filter danh sach quan
-                Toast.makeText(getContext(), "Tính năng chưa hoàn thiện", Toast.LENGTH_SHORT).show();
-                changeTab(0);
+                changeFilter(position);
             }
         });
 
+        // Tab 2:
+        listViewCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                changeCategory(position);
+            }
+        });
 
         // Tab 3:
+        //
+        textViewTabLocationCurrentCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeCity(selectedCityId,selectedCityName);
+            }
+        });
         // thay the event mo rong khi nhan -> chon thanh pho
         listViewDistrict.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                useDistrcitFiler = true;
-                useStreetFilter = false;
-                selectedDistrictId = ((District) (listViewDistrict.getExpandableListAdapter()).getGroup(groupPosition)).getId();
-                Log.w("Log","selectedDistrictId change: "+selectedDistrictId);
-                updateWhereItemListData();
-                changeTab(0);
-                return true;
+                changeDistrict(groupPosition);
+                return false;
             }
         });
         listViewDistrict.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                useDistrcitFiler = false;
-                useStreetFilter = true;
-                selectedStreetId = ((Street) (listViewDistrict.getExpandableListAdapter()).getChild(groupPosition,childPosition)).getId();
-                Log.w("Log","selectedStreetId change: "+selectedStreetId);
-                updateWhereItemListData();
-                changeTab(0);
-                return true;
+                changeStreet(groupPosition,childPosition);
+                return false;
             }
         });
         // xu li thay doi tinh/thanh pho
@@ -327,22 +305,24 @@ public class HomeWhereFragment extends Fragment {
 
     // update du lieu recycler view (Tab 0)
     private void updateWhereItemListData() {
-        ArrayList<WhereItem> itemList = null;
         ItemDB itemDB = new ItemDB(database);
-        if(!useDistrcitFiler && !useStreetFilter){
-            itemList = itemDB.getItemList(selectedCityId, 0);
-        }
-        else {
-            if(useStreetFilter){
-                itemList = itemDB.getItemList(selectedStreetId, 2);
-                useDistrcitFiler = false;
-            }
-            if (useDistrcitFiler) {
-                itemList = itemDB.getItemList(selectedDistrictId, 1);
-                useStreetFilter = false;
-            }
-        }
+        ArrayList<WhereItem> itemList = itemDB.findItemsByFields(selectedCityId,selectedDistrictId,selectedStreetId,selectedCategoryId);
         RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getContext(),itemList,gridViewMenuAdapter,viewPagerSlideAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        /* 2 col layout
+        final GridLayoutManager layoutManager = new GridLayoutManager(getContext(),2);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (recyclerViewAdapter.getItemViewType(position) == RecyclerViewAdapter.TYPE_ITEM){
+                    return 1;
+                }
+                else
+                    return layoutManager.getSpanCount();
+            }
+        });
+        recyclerView.setLayoutManager(layoutManager);
+        */
         recyclerView.setAdapter(recyclerViewAdapter);
 
         // tweaks cho recycler view
@@ -350,6 +330,8 @@ public class HomeWhereFragment extends Fragment {
         //recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
         //recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+
+        changeTab(0);
     }
 
 
@@ -363,7 +345,6 @@ public class HomeWhereFragment extends Fragment {
 
     // thay doi tab page
     private void changeTab(int tabIndex) {
-        Log.w("log","Current tab: "+tabHost.getCurrentTab()+"\nIndex: "+tabIndex);
         if (tabIndex == 0){
             showNav();
             tabHost.setCurrentTab(0);
@@ -381,6 +362,64 @@ public class HomeWhereFragment extends Fragment {
                 tabHost.setCurrentTab(tabIndex);
             }
         }
+    }
+
+    // thay doi filter
+    private void changeFilter(int index) {
+        ListViewFilterAdapter listViewFilterAdapter = (ListViewFilterAdapter) listViewFilter.getAdapter();
+        listViewFilterAdapter.setSelectedIndex(index);
+        buttonFilter.setText((String)(listViewFilterAdapter.getItem(index)));
+
+        if(index>0)
+            Toast.makeText(getContext(), "Tính năng lọc chưa hoàn thiện", Toast.LENGTH_SHORT).show();
+
+        changeTab(0);
+    }
+
+    // thay doi danh muc
+    private void changeCategory(int index){
+        ListViewCategoryAdapter listViewCategoryAdapter = (ListViewCategoryAdapter) listViewCategory.getAdapter();
+        listViewCategoryAdapter.setSelectedIndex(index);
+        buttonCategory.setText(((Category) listViewCategoryAdapter.getItem(index)).getName());
+        selectedCategoryId = ((Category) listViewCategoryAdapter.getItem(index)).getId();
+
+        updateWhereItemListData();
+        //Toast.makeText(getContext(), "Tính năng chưa hoàn thiện", Toast.LENGTH_SHORT).show();
+    }
+
+    private void changeCity(int cityId, String cityName){
+        selectedDistrictId = 0;
+        selectedStreetId = 0;
+        selectedCityId = cityId;
+        selectedCityName = cityName;
+        buttonLocation.setText(selectedCityName);
+        textViewTabLocationCurrentCity.setText(selectedCityName);
+
+        // cap nhat ds quan huyen
+        DistrictDB districtDB = new DistrictDB(this.database);
+        ArrayList<District> districtList = districtDB.getDistrictList(selectedCityId);
+        ListViewDistrictAdapter listViewDistrictAdapter = new ListViewDistrictAdapter(getContext(),districtList);
+        listViewDistrict.setAdapter(listViewDistrictAdapter);
+
+        changeFilter(0);
+        changeCategory(0);
+    }
+
+    private void changeDistrict(int index){
+        selectedStreetId = 0;
+        ((ListViewDistrictAdapter) listViewDistrict.getExpandableListAdapter()).setSelectedGroupIndex(index);
+        District selectedDistrict = (District) (listViewDistrict.getExpandableListAdapter()).getGroup(index);
+        selectedDistrictId = selectedDistrict.getId();
+        buttonLocation.setText(selectedDistrict.getName());
+        updateWhereItemListData();
+    }
+
+    private void changeStreet(int districtIndex, int streetIndex) {
+        ((ListViewDistrictAdapter) listViewDistrict.getExpandableListAdapter()).setSelectedChildIndex(districtIndex,streetIndex);
+        Street selectedStreet = (Street) (listViewDistrict.getExpandableListAdapter()).getChild(districtIndex,streetIndex);
+        selectedStreetId = selectedStreet.getId();
+        buttonLocation.setText(selectedStreet.getName());
+        updateWhereItemListData();
     }
 
 }

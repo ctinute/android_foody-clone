@@ -12,14 +12,14 @@ import com.ctinute.foody.Objects.Street;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class StreetDBHelper extends SQLiteOpenHelper {
+public class StreetDB extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "foody.db";
     private static final String TABLE_NAME = "DISTRICT";
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_NAME = "NAME";
     private HashMap hashMap;
 
-    public StreetDBHelper(Context context) {
+    public StreetDB(Context context) {
         super(context, DATABASE_NAME , null, 1);
     }
 

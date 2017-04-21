@@ -117,11 +117,13 @@
                     android:id="@+id/tab_category"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-                    <TextView
+                    <ListView
+                        android:id="@+id/listview_category"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="Tính năng chưa hoàn thiện" />
+                        android:layout_height="wrap_content"
+                        android:divider="@color/colorBackgroundDark"
+                        android:dividerHeight="1dp">
+                    </ListView>
                     <Button
                         android:id="@+id/button_cancel2"
                         android:layout_width="match_parent"
@@ -181,6 +183,8 @@
                         android:layout_height="match_parent"
                         android:divider="@color/colorBackgroundDark"
                         android:dividerHeight="1dp"
+                        android:childDivider="#00000000"
+                        android:groupIndicator="@null"
                         android:layout_below="@id/tab_location_topPanel"/>
                     <Button
                         android:id="@+id/button_cancel3"

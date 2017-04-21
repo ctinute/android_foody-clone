@@ -53,20 +53,8 @@ public class ItemDB {
     }
     */
 
-    public ArrayList<WhereItem> getItemList(int id, int mode) {
+    public ArrayList<WhereItem> getItemList(String query) {
         ArrayList<WhereItem> list = new ArrayList<>();
-        String query = "select * from "+TABLE_NAME;
-        switch (mode){
-            case 0: // city
-                query =  "select * from "+TABLE_NAME+ " where CITYID = "+id;
-                break;
-            case 1:
-                query =  "select * from "+TABLE_NAME+ " where DISTRICTID = "+id;
-                break;
-            case 2:
-                query =  "select * from "+TABLE_NAME+ " where STREETID = "+id;
-                break;
-        }
         Cursor res =  db.rawQuery(query,null);
         if ((res.moveToFirst()) && res.getCount() > 0){
             while(!res.isAfterLast()){
@@ -87,5 +75,57 @@ public class ItemDB {
         }
         res.close();
         return list;
+    }
+
+    public ArrayList<WhereItem> findItemsByCity(int cityId) {
+        String query =  "select * from "+TABLE_NAME+ " where CITYID = "+cityId;
+        return getItemList(query);
+    }
+
+    public ArrayList<WhereItem> findItemsByDistrict(int districtId) {
+        String query =  "select * from "+TABLE_NAME+ " where DISTRICTID = "+districtId;
+        return getItemList(query);
+    }
+
+    public ArrayList<WhereItem> findItemsByStreet(int streetId) {
+        String query =  "select * from "+TABLE_NAME+ " where STREETID = "+streetId;
+        return getItemList(query);
+    }
+
+    public ArrayList<WhereItem> findItemsByFields(int cityId, int districtId, int streetId, int categoryId) {
+        String query;
+        if (categoryId <= 1){
+            // no category (all)
+            if (streetId > 0) {
+                // tim theo duong
+                query =  "select * from "+TABLE_NAME+ " where STREETID = "+streetId;
+            }
+            else if (districtId > 0) {
+                // tim theo quan/huyen
+                query =  "select * from "+TABLE_NAME+ " where DISTRICTID = "+districtId;
+            }
+            else if (cityId > 0) {
+                query =  "select * from "+TABLE_NAME+ " where CITYID = "+cityId;
+            }
+            else
+                query =  "select * from "+TABLE_NAME;    // lay het
+        }
+        else {
+            // thim theo category
+            if (streetId > 0) {
+                // tim theo duong
+                query =  "select * from "+TABLE_NAME+ " where CATEGORYID="+categoryId+" and STREETID = "+streetId;
+            }
+            else if (districtId > 0) {
+                // tim theo quan/huyen
+                query =  "select * from "+TABLE_NAME+ " where CATEGORYID="+categoryId+" and DISTRICTID = "+districtId;
+            }
+            else if (cityId > 0) {
+                query =  "select * from "+TABLE_NAME+ " where CATEGORYID="+categoryId+" and CITYID = "+cityId;
+            }
+            else
+                query =  "select * from "+TABLE_NAME+" where CATEGORYID="+categoryId;    // lay het
+        }
+        return getItemList(query);
     }
 }

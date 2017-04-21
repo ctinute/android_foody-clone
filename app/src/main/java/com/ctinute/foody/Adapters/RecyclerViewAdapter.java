@@ -26,10 +26,10 @@ import java.util.TimerTask;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int TYPE_SLIDE = 0;
-    private static final int TYPE_GRID = 1;
-    private static final int TYPE_NULL = 2;
-    private static final int TYPE_ITEM = 3;
+    public static final int TYPE_SLIDE = 0;
+    public static final int TYPE_GRID = 1;
+    public static final int TYPE_NULL = 2;
+    public static final int TYPE_ITEM = 3;
 
     private Context mContext;
     private ArrayList<WhereItem> itemList;
@@ -79,19 +79,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         RecyclerView.ViewHolder viewHolder = null;
         switch (i) {
             case TYPE_SLIDE:
-                view = inflater.inflate(R.layout.recycler_where_slide, parent, false);
+                view = inflater.inflate(R.layout.recycler_slide, parent, false);
                 viewHolder = new ViewHolderSlide(view);
                 break;
             case TYPE_GRID:
-                view = inflater.inflate(R.layout.recycler_where_grid, parent, false);
+                view = inflater.inflate(R.layout.recycler_grid, parent, false);
                 viewHolder = new ViewHolderGrid(view);
                 break;
             case TYPE_NULL:
-                view = inflater.inflate(R.layout.recycler_item_null, parent, false);
+                view = inflater.inflate(R.layout.layout_item_error, parent, false);
                 viewHolder = new ViewHolderNull(view);
                 break;
             case TYPE_ITEM:
-                view = inflater.inflate(R.layout.recycler_where_item, parent, false);
+                view = inflater.inflate(R.layout.recycler_item_where, parent, false);
                 viewHolder = new ViewHolderItem(view);
                 break;
         }

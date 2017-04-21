@@ -1,6 +1,7 @@
 package com.ctinute.foody.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,26 @@ public class ListViewDistrictAdapter extends BaseExpandableListAdapter {
 
     private Context mContext;
     private List<District> districtList;
+    private int selectedGroupIndex;
+    private int selectedChildIndex;
 
     public ListViewDistrictAdapter(Context c, List<District> districtList){
         mContext =c;
         this.districtList = districtList;
+        selectedChildIndex = -1;
+        selectedGroupIndex = -1;
+    }
+
+    public void setSelectedGroupIndex(int selectedGroupIndex) {
+        this.selectedGroupIndex = selectedGroupIndex;
+        selectedChildIndex = -1;
+        notifyDataSetChanged();
+    }
+
+    public void setSelectedChildIndex(int selectedGroupIndex, int selectedChildIndex) {
+        this.selectedGroupIndex = selectedGroupIndex;
+        this.selectedChildIndex = selectedChildIndex;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -62,6 +79,7 @@ public class ListViewDistrictAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
+
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         District districtToDisplay = districtList.get(groupPosition);
@@ -70,18 +88,16 @@ public class ListViewDistrictAdapter extends BaseExpandableListAdapter {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
-            listItem = inflater.inflate(R.layout.listview_district_item, parent, false);
+            listItem = inflater.inflate(R.layout.layout_item_district, parent, false);
         } else {
             listItem = convertView;
         }
 
         TextView textViewDistrictName = (TextView) listItem.findViewById(R.id.item_text_cname);
-        TextView textViewDistrictId = (TextView) listItem.findViewById(R.id.item_text_did);
         TextView textViewNumberOfStreet = (TextView) listItem.findViewById(R.id.item_text_numberOfStreet);
         LinearLayout buttonStreet = (LinearLayout) listItem.findViewById(R.id.item_button_street);
 
         textViewDistrictName.setText(districtToDisplay.getName());
-        textViewDistrictId.setText(String.valueOf(districtToDisplay.getId()));
         String strToDisplay = String.valueOf(districtToDisplay.getStreetList().size())+" đường";
         textViewNumberOfStreet.setText(strToDisplay);
 
@@ -95,9 +111,29 @@ public class ListViewDistrictAdapter extends BaseExpandableListAdapter {
                 if(fisExpanded)
                     ((ExpandableListView) fparent).collapseGroup(fgroupPosition);
                 else
-                    ((ExpandableListView) fparent).expandGroup(fgroupPosition, true);
+                    ((ExpandableListView) fparent).expandGroup(fgroupPosition);
             }
         });
+
+        // selected ?
+        if (groupPosition == selectedGroupIndex){
+            if (selectedChildIndex == -1) {
+                // chon quan huyen, ko chon duong
+                //((ExpandableListView) parent).collapseGroup(groupPosition);
+                textViewDistrictName.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+            }
+            else {
+                // co chon duong
+                //((ExpandableListView) parent).expandGroup(groupPosition);
+                textViewDistrictName.setTextColor(mContext.getResources().getColor(R.color.textColorMain));
+            }
+        }
+        else {
+            // ko phai quan/huyen dang chon
+            //((ExpandableListView) parent).collapseGroup(groupPosition);
+            textViewDistrictName.setTextColor(mContext.getResources().getColor(R.color.textColorMain));
+        }
+
         return listItem;
     }
 
@@ -109,15 +145,21 @@ public class ListViewDistrictAdapter extends BaseExpandableListAdapter {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
-            listItem = inflater.inflate(R.layout.listview_item_text_and_id,  parent, false);
+            listItem = inflater.inflate(R.layout.layout_item_text_only_margin_left,  parent, false);
         } else {
             listItem = convertView;
         }
 
-        TextView textView = (TextView) listItem.findViewById(R.id.item_text_streetname);
-        TextView textViewId = (TextView) listItem.findViewById(R.id.item_text_streetid);
+        TextView textView = (TextView) listItem.findViewById(R.id.item_text);
         textView.setText(streetToDisplay.getName());
-        textViewId.setText(String.valueOf(streetToDisplay.getId()));
+
+        // selected ?
+        if (groupPosition == selectedGroupIndex && childPosition == selectedChildIndex){
+            textView.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+        }
+        else {
+            textView.setTextColor(mContext.getResources().getColor(R.color.textColorMain));
+        }
 
         return listItem;
     }
