@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,17 +26,17 @@ import com.ctinute.foody.Adapters.GridViewMenuAdapter;
 import com.ctinute.foody.Adapters.ListViewCategoryAdapter;
 import com.ctinute.foody.Adapters.ListViewDistrictAdapter;
 import com.ctinute.foody.Adapters.ListViewFilterAdapter;
-import com.ctinute.foody.Adapters.RecyclerViewAdapter;
+import com.ctinute.foody.Adapters.RecyclerViewWhereAdapter;
 import com.ctinute.foody.Adapters.ViewPagerSlideAdapter;
 import com.ctinute.foody.CustomView.BottomNavigationViewEx;
 import com.ctinute.foody.Database.CategoryDB;
 import com.ctinute.foody.Database.DistrictDB;
-import com.ctinute.foody.Database.ItemDB;
+import com.ctinute.foody.Database.ItemWhereDB;
 import com.ctinute.foody.MainActivity;
 import com.ctinute.foody.Objects.Category;
 import com.ctinute.foody.Objects.District;
 import com.ctinute.foody.Objects.Street;
-import com.ctinute.foody.Objects.WhereItem;
+import com.ctinute.foody.Objects.ItemWhere;
 import com.ctinute.foody.R;
 import com.ctinute.foody.SelectCityActivity;
 
@@ -305,16 +304,16 @@ public class HomeWhereFragment extends Fragment {
 
     // update du lieu recycler view (Tab 0)
     private void updateWhereItemListData() {
-        ItemDB itemDB = new ItemDB(database);
-        ArrayList<WhereItem> itemList = itemDB.findItemsByFields(selectedCityId,selectedDistrictId,selectedStreetId,selectedCategoryId);
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getContext(),itemList,gridViewMenuAdapter,viewPagerSlideAdapter);
+        ItemWhereDB itemWhereDB = new ItemWhereDB(database);
+        ArrayList<ItemWhere> itemList = itemWhereDB.findItemsByFields(selectedCityId,selectedDistrictId,selectedStreetId,selectedCategoryId);
+        RecyclerViewWhereAdapter recyclerViewWhereAdapter = new RecyclerViewWhereAdapter(getContext(),itemList,gridViewMenuAdapter,viewPagerSlideAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         /* 2 col layout
         final GridLayoutManager layoutManager = new GridLayoutManager(getContext(),2);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (recyclerViewAdapter.getItemViewType(position) == RecyclerViewAdapter.TYPE_ITEM){
+                if (recyclerViewWhereAdapter.getItemViewType(position) == RecyclerViewWhereAdapter.TYPE_ITEM){
                     return 1;
                 }
                 else
@@ -323,7 +322,7 @@ public class HomeWhereFragment extends Fragment {
         });
         recyclerView.setLayoutManager(layoutManager);
         */
-        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setAdapter(recyclerViewWhereAdapter);
 
         // tweaks cho recycler view
         recyclerView.setHasFixedSize(true);

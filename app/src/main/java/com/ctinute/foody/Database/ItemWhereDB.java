@@ -1,25 +1,19 @@
 package com.ctinute.foody.Database;
 
-import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import com.ctinute.foody.Objects.District;
-import com.ctinute.foody.Objects.Street;
-import com.ctinute.foody.Objects.WhereItem;
+import com.ctinute.foody.Objects.ItemWhere;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class ItemDB {
+public class ItemWhereDB {
     private static final String TABLE_NAME = "ITEM";
     private static final String COLUMN_ID = "ID";
 
     private SQLiteDatabase db;
 
-    public ItemDB(SQLiteDatabase sqLiteDatabase) {
+    public ItemWhereDB(SQLiteDatabase sqLiteDatabase) {
         this.db = sqLiteDatabase;
     }
 
@@ -53,12 +47,12 @@ public class ItemDB {
     }
     */
 
-    public ArrayList<WhereItem> getItemList(String query) {
-        ArrayList<WhereItem> list = new ArrayList<>();
+    public ArrayList<ItemWhere> getItemList(String query) {
+        ArrayList<ItemWhere> list = new ArrayList<>();
         Cursor res =  db.rawQuery(query,null);
         if ((res.moveToFirst()) && res.getCount() > 0){
             while(!res.isAfterLast()){
-                WhereItem item = new WhereItem();
+                ItemWhere item = new ItemWhere();
                 item.setAvgRating(res.getDouble(res.getColumnIndex("AVGRATING")));
                 item.setName(res.getString(res.getColumnIndex("NAME")));
                 item.setAddress(res.getString(res.getColumnIndex("ADDRESS")));
@@ -77,22 +71,22 @@ public class ItemDB {
         return list;
     }
 
-    public ArrayList<WhereItem> findItemsByCity(int cityId) {
+    public ArrayList<ItemWhere> findItemsByCity(int cityId) {
         String query =  "select * from "+TABLE_NAME+ " where CITYID = "+cityId;
         return getItemList(query);
     }
 
-    public ArrayList<WhereItem> findItemsByDistrict(int districtId) {
+    public ArrayList<ItemWhere> findItemsByDistrict(int districtId) {
         String query =  "select * from "+TABLE_NAME+ " where DISTRICTID = "+districtId;
         return getItemList(query);
     }
 
-    public ArrayList<WhereItem> findItemsByStreet(int streetId) {
+    public ArrayList<ItemWhere> findItemsByStreet(int streetId) {
         String query =  "select * from "+TABLE_NAME+ " where STREETID = "+streetId;
         return getItemList(query);
     }
 
-    public ArrayList<WhereItem> findItemsByFields(int cityId, int districtId, int streetId, int categoryId) {
+    public ArrayList<ItemWhere> findItemsByFields(int cityId, int districtId, int streetId, int categoryId) {
         String query;
         if (categoryId <= 1){
             // no category (all)

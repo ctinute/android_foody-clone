@@ -77,14 +77,13 @@
                     android:id="@+id/tab_default"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingBottom="48dp"
                     android:orientation="vertical"
                     android:background="@color/colorBackground">
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:verticalSpacing="8dp"
                         android:divider="@android:color/transparent"
                         android:dividerHeight="8dp"/>

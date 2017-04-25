@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:background="@color/colorWhite">
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/fdi1"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/tmpdescrition" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp">
+        <TextView
+            android:id="@+id/item_food_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Ten mon"
+            android:textSize="@dimen/text_normal"
+            android:textColor="@color/textColorMain"/>
+        <TextView
+            android:id="@+id/item_location_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Ten quan"
+            android:textSize="@dimen/text_normal"
+            android:textColor="@color/textColorMain"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/item_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Dia chi"
+            android:textSize="@dimen/text_normal"
+            android:textColor="@color/textColorGrey"/>
+    </LinearLayout>
+</LinearLayout>

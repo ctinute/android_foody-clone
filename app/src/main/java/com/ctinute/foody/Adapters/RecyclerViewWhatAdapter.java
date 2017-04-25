@@ -12,11 +12,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.ctinute.foody.CustomView.ExpandableHeightGridView;
-import com.ctinute.foody.Objects.WhereItem;
+import com.ctinute.foody.Objects.ItemWhat;
 import com.ctinute.foody.R;
 
 import java.util.ArrayList;
@@ -24,20 +22,19 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+public class RecyclerViewWhatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_SLIDE = 0;
     public static final int TYPE_GRID = 1;
     public static final int TYPE_NULL = 2;
     public static final int TYPE_ITEM = 3;
 
     private Context mContext;
-    private ArrayList<WhereItem> itemList;
+    private ArrayList<ItemWhat> itemList;
 
     private BaseAdapter gridAdapter;    // adapter cho GridView
     private PagerAdapter slideAdapter;  // adapter cho ViewPager (Image Slide)
 
-    public RecyclerViewAdapter(Context mContext, ArrayList<WhereItem> itemList, BaseAdapter gridAdapter, PagerAdapter slideAdapter) {
+    public RecyclerViewWhatAdapter(Context mContext, ArrayList<ItemWhat> itemList, BaseAdapter gridAdapter, PagerAdapter slideAdapter) {
         this.mContext = mContext;
         this.itemList = itemList;
         this.slideAdapter = slideAdapter;
@@ -80,19 +77,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (i) {
             case TYPE_SLIDE:
                 view = inflater.inflate(R.layout.recycler_slide, parent, false);
-                viewHolder = new ViewHolderSlide(view);
+                viewHolder = new RecyclerViewWhatAdapter.ViewHolderSlide(view);
                 break;
             case TYPE_GRID:
                 view = inflater.inflate(R.layout.recycler_grid, parent, false);
-                viewHolder = new ViewHolderGrid(view);
+                viewHolder = new RecyclerViewWhatAdapter.ViewHolderGrid(view);
                 break;
             case TYPE_NULL:
                 view = inflater.inflate(R.layout.layout_item_error, parent, false);
-                viewHolder = new ViewHolderNull(view);
+                viewHolder = new RecyclerViewWhatAdapter.ViewHolderNull(view);
                 break;
             case TYPE_ITEM:
-                view = inflater.inflate(R.layout.recycler_item_where, parent, false);
-                viewHolder = new ViewHolderItem(view);
+                view = inflater.inflate(R.layout.recycler_item_what, parent, false);
+                viewHolder = new RecyclerViewWhatAdapter.ViewHolderItem(view);
                 break;
         }
         return viewHolder;
@@ -103,7 +100,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         //Log.w("log","onBindViewHolder "+i + " - type"+viewHolder.getItemViewType());
         switch (viewHolder.getItemViewType()){
             case TYPE_SLIDE:
-                final ViewHolderSlide viewHolderSlide = (ViewHolderSlide) viewHolder;
+                final RecyclerViewWhatAdapter.ViewHolderSlide viewHolderSlide = (RecyclerViewWhatAdapter.ViewHolderSlide) viewHolder;
                 viewHolderSlide.viewPager.setAdapter(slideAdapter);
 
                 // thiet lap tu dong slide
@@ -128,13 +125,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 break;
 
             case TYPE_GRID:
-                ViewHolderGrid viewHolderGrid = (ViewHolderGrid) viewHolder;
+                RecyclerViewWhatAdapter.ViewHolderGrid viewHolderGrid = (RecyclerViewWhatAdapter.ViewHolderGrid) viewHolder;
                 viewHolderGrid.gridView.setExpanded(true);
                 viewHolderGrid.gridView.setAdapter(gridAdapter);
                 break;
 
             case TYPE_NULL:
-                ViewHolderNull viewHolderNull = (ViewHolderNull) viewHolder;
+                RecyclerViewWhatAdapter.ViewHolderNull viewHolderNull = (RecyclerViewWhatAdapter.ViewHolderNull) viewHolder;
                 if (itemList == null || itemList.size() == 0){
                     viewHolderNull.layout.setVisibility(View.VISIBLE);
                     viewHolderNull.imageView.setVisibility(View.VISIBLE);
@@ -148,32 +145,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 break;
 
             case TYPE_ITEM:
-                ViewHolderItem viewHolderItem = (ViewHolderItem) viewHolder;
-                WhereItem whereItem = itemList.get(i-3);
+                RecyclerViewWhatAdapter.ViewHolderItem viewHolderItem = (RecyclerViewWhatAdapter.ViewHolderItem) viewHolder;
+                ItemWhat itemWhat = itemList.get(i-3);
 
-                viewHolderItem.textViewAvgRating.setText(String.valueOf((double) Math.round(whereItem.getAvgRating() * 10) / 10));
-                viewHolderItem.textViewLabel.setText(whereItem.getName());
-                viewHolderItem.textViewAddress.setText(whereItem.getAddress());
-                // TODO: xu li video
-                if (!whereItem.getImg().equals("")){
-                    int imageResource = mContext.getResources().getIdentifier("fdi"+whereItem.getImg(), "drawable", mContext.getPackageName());
+                if (!itemWhat.getImage().equals("")){
+                    int imageResource = mContext.getResources().getIdentifier("fdi"+ itemWhat.getImage(), "drawable", mContext.getPackageName());
                     viewHolderItem.imageView.setImageResource(imageResource);
                 }
                 else {
                     viewHolderItem.imageView.setImageResource(R.drawable.fdi_null);
                 }
-                viewHolderItem.buttonOrder.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(mContext,"Tính năng chưa hoàn thiện !",Toast.LENGTH_SHORT).show();
-                    }
-                });
-                viewHolderItem.textViewComment.setText(String.valueOf(whereItem.getTotalReviews()));
-                viewHolderItem.textViewPhoto.setText(String.valueOf(whereItem.getTotalPictures()));
-                // TODO: xu li trang thai dua vao gio dong mo cua trong database (can sua lai database)
-                viewHolderItem.textViewStatus.setText(String.valueOf("Đang mở cửa"));
-                viewHolderItem.imageViewStatus.setColorFilter(mContext.getResources().getColor(R.color.colorSuccess));
-                //Log.w("log","created item");
+                viewHolderItem.textViewFoodName.setText(itemWhat.getFoodName());
+                viewHolderItem.textViewLocationName.setText(itemWhat.getLocationName());
+                viewHolderItem.textViewAddress.setText(itemWhat.getAddress());
                 break;
         }
     }
@@ -195,29 +179,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private static class ViewHolderItem extends RecyclerView.ViewHolder {
-        TextView textViewAvgRating;
-        TextView textViewLabel;
+        TextView textViewFoodName;
+        TextView textViewLocationName;
         TextView textViewAddress;
-        VideoView videoView ;
         ImageView imageView;
-        LinearLayout buttonOrder;
-        TextView textViewComment;
-        TextView textViewPhoto;
-        TextView textViewStatus;
-        ImageView imageViewStatus;
 
         ViewHolderItem(View v) {
             super(v);
-            textViewAvgRating = (TextView) v.findViewById(R.id.item_text_avgRating);
-            textViewLabel = (TextView) v.findViewById(R.id.item_text_label);
-            textViewAddress = (TextView) v.findViewById(R.id.item_text_address);
-            videoView = (VideoView) v.findViewById(R.id.item_video);
+            textViewFoodName = (TextView) v.findViewById(R.id.item_food_name);
+            textViewLocationName = (TextView) v.findViewById(R.id.item_location_name);
+            textViewAddress = (TextView) v.findViewById(R.id.item_address);
             imageView = (ImageView) v.findViewById(R.id.item_image);
-            buttonOrder = (LinearLayout) v.findViewById(R.id.item_button_oderNNow);
-            textViewComment = (TextView) v.findViewById(R.id.item_text_comment);
-            textViewPhoto = (TextView) v.findViewById(R.id.item_text_photo);
-            textViewStatus = (TextView) v.findViewById(R.id.item_text_status);
-            imageViewStatus = (ImageView) v.findViewById(R.id.item_image_status);
         }
     }
 
@@ -233,5 +205,4 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             textView = (TextView) v.findViewById(R.id.list_item_text_null);
         }
     }
-
 }

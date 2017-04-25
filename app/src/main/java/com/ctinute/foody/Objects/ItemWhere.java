@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 
-public class WhereItem implements Serializable {
+public class ItemWhere implements Serializable {
     private Integer id,restaurantId,categoryId, cityID, districtId, streetId, totalPictures,totalReviews,typeId;
     private Double avgRating;
     private String address,name,img;
