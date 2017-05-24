@@ -3,17 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="32dp">
+    android:layout_height="36dp"
+    android:padding="8dp">
     <ImageView
         android:id="@+id/item_image"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_alignParentLeft="true"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_alignParentStart="true"
         android:src="@drawable/ic_square_null"
         android:contentDescription="@string/tmpdescrition" />
@@ -21,20 +16,17 @@
         android:id="@+id/item_text"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:layout_toRightOf="@id/item_image"
         android:layout_toEndOf="@id/item_image"
         android:gravity="center_vertical"
         android:textSize="@dimen/text_normal"
-        android:text="hahahhahah"/>
+        android:text="@string/txt_sample_text"/>
     <ImageView
         android:id="@+id/item_check"
         android:layout_width="12dp"
         android:layout_height="12dp"
-        android:layout_margin="12dp"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:src="@drawable/ic_line_checked_blue"
         android:tint="@color/colorPrimary"/>
 </RelativeLayout>

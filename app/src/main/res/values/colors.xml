@@ -8,9 +8,15 @@
     <color name="textColorMain">#606060</color>
     <color name="textColorGrey">#A0A0A0</color>
 
+    <!--
     <color name="colorBackground">#f0f0f0</color>
     <color name="colorBackgroundDark">#ECECEC</color>
     <color name="colorBackgroundDarker">#E4E4E4</color>
+    <color name="colorBackgroundDarkerr">#B7B7B7</color>
+    -->
+    <color name="colorBackground">#ECECEC</color>
+    <color name="colorBackgroundDark">#E5E5E5</color>
+    <color name="colorBackgroundDarker">#D3D3D3</color>
     <color name="colorBackgroundDarkerr">#B7B7B7</color>
 
     <color name="color_nav_icon">#424242</color>
@@ -20,5 +26,9 @@
     <color name="color_btn_table_now">#fff37a34</color>
     <color name="color_btn_top">#55aaaaaa</color>
 
+    <color name="black_overlay">#66000000</color>
+
+    <color name="sermi_blur_white">#A0FFFFFF</color>
+    <color name="sermi_blur_whiter">#E0FFFFFF</color>
 
 </resources>

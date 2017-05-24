@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context="com.ctinute.foody.Fragment.HomeWhereFragment">
+    tools:context=".View.Fragment.HomeWhereFragment">
 
     <TabHost
         android:id="@+id/tabhost"
@@ -99,7 +99,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
-                        android:divider="@color/colorBackgroundDarker"
+                        android:divider="@color/colorBackgroundDark"
                         android:dividerHeight="1dp"/>
                     <Button
                         android:id="@+id/button_cancel1"

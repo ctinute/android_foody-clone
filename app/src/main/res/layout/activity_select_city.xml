@@ -7,7 +7,7 @@
     android:background="@color/colorBackground"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
-    tools:context="com.ctinute.foody.SelectCityActivity">
+    tools:context="com.ctinute.foody.View.SelectCityActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -62,9 +62,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:hint="Tìm nhanh"
+                android:hint="@string/txt_quick_search"
                 android:textSize="12sp"
                 android:background="#00000000"
+                android:maxLines="1"
                 />
         </LinearLayout>
         <RelativeLayout

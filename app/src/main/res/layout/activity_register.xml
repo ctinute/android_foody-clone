@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blurred_background"
+    tools:context="com.ctinute.foody.View.LoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/appbar_height_default">
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00000000"
+            android:src="@drawable/ic_arrow_back_white"
+            android:contentDescription="@string/tmpdescrition" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@id/button_back"
+            android:gravity="center_vertical"
+            android:text="Đăng kí"
+            android:textSize="@dimen/text_label"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+        <EditText
+            android:id="@+id/inp_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tên"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/sermi_blur_white"
+            android:backgroundTint="@color/sermi_blur_whiter"/>
+        <EditText
+            android:id="@+id/inp_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/sermi_blur_white"
+            android:backgroundTint="@color/sermi_blur_whiter"/>
+        <EditText
+            android:id="@+id/inp_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:hint="Mật khẩu"
+            android:inputType="textPassword"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/sermi_blur_white"
+            android:backgroundTint="@color/sermi_blur_whiter"/>
+        <EditText
+            android:id="@+id/inp_repassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:hint="Nhập lại mật khẩu"
+            android:inputType="textPassword"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/sermi_blur_white"
+            android:backgroundTint="@color/sermi_blur_whiter"/>
+        <Button
+            android:id="@+id/register"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_button_transparent_stroke_white"
+            android:text="Đăng kí"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_alignParentBottom="true"
+        android:background="#0AFFFFFF"
+        android:text="Đăng nhập"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"/>
+
+</RelativeLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/coupon"
+        android:icon="@drawable/ic_ecoupon"
+        android:title="Quét mã Coupon" />
+
+    <item
+        android:id="@+id/navigation_collection"
+        android:icon="@drawable/icon_home_upload_image"
+        android:title="Đăng ảnh" />
+
+    <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/icon_home_checkin"
+        android:title="Check-in" />
+
+    <item
+        android:id="@+id/navigation_notification"
+        android:icon="@drawable/icon_home_review1"
+        android:title="Viết bình luận" />
+
+    <item
+        android:id="@+id/navigation_account"
+        android:icon="@drawable/icon_home_add_new_place"
+        android:title="Thêm địa điểm" />
+</menu>

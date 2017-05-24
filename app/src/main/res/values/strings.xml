@@ -27,4 +27,16 @@
     <string name="str_function_error">Tính năng chưa hoàn thiện !</string>
     <string name="str_select_city_label">Chọn Tỉnh/Thành phố</string>
     <string name="str_error_no_content">Không có nội dung !</string>
+
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="text_loading">Đang tải</string>
+    <string name="txt_quick_search">Tìm nhanh</string>
+    <string name="txt_sample_text">Quán ăn</string>
+    <string name="txt_account">Tài khoản</string>
+    <string name="txt_login">Đăng nhập</string>
+    <string name="txt_reservation_history">Lịch sử đặt chỗ</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
 </resources>

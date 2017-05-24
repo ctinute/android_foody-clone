@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ctinute.foody.MainActivity">
+    tools:context="com.ctinute.foody.View.MainActivity">
 
     <TabHost
         android:id="@android:id/tabhost"
@@ -35,7 +35,7 @@
         </LinearLayout>
     </TabHost>
 
-    <com.ctinute.foody.CustomView.BottomNavigationViewEx
+    <com.ctinute.foody.View.CustomView.BottomNavigationViewEx
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
